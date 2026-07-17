@@ -74,6 +74,9 @@ document.getElementById('source-run').textContent=brain.provenance?.source_run_i
 renderOverview();
 </script></body></html>`;
 
-fs.writeFileSync(path.join(outputDir, 'index.html'), html.replace('__BRAIN_DATA__', safeJson));
+const builtHtml = html.replace('__BRAIN_DATA__', safeJson);
+fs.writeFileSync(path.join(outputDir, 'index.html'), builtHtml);
+// GitHub Pages serves the repository root from the selected branch.
+fs.writeFileSync(path.join(root, 'index.html'), builtHtml);
 fs.writeFileSync(path.join(outputDir, 'dependencies.json'), JSON.stringify(['brain_deliverables.json'], null, 2) + '\n');
-console.log('Built output/index.html with ' + source.files.length + ' embedded files.');
+console.log('Built index.html and output/index.html with ' + source.files.length + ' embedded files.');

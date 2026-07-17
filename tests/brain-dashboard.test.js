@@ -5,13 +5,16 @@ const test = require('node:test');
 
 const root = path.resolve(__dirname, '..');
 const sourcePath = path.join(root, 'brain_deliverables.json');
+const rootOutputPath = path.join(root, 'index.html');
 const outputPath = path.join(root, 'output', 'index.html');
 const dependenciesPath = path.join(root, 'output', 'dependencies.json');
 
 test('dashboard embeds the complete brain deliverables manifest', () => {
+  assert.equal(fs.existsSync(rootOutputPath), true, 'root index.html must exist for GitHub Pages');
   assert.equal(fs.existsSync(outputPath), true, 'output/index.html must exist');
   const source = JSON.parse(fs.readFileSync(sourcePath, 'utf8'));
   const html = fs.readFileSync(outputPath, 'utf8');
+  assert.equal(fs.readFileSync(rootOutputPath, 'utf8'), html, 'root and artifact dashboards must match');
 
   assert.match(html, /id="brain-data"/);
   const match = html.match(/<script id="brain-data" type="application\/json">([\s\S]*?)<\/script>/);
